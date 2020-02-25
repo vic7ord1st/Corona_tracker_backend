@@ -52,6 +52,10 @@ module.exports = {
                         caseCount.push(dataArray[i + 2])
                         break;
                     }
+                case 'Italy':
+                    casesByCountry.push(dataArray[i])
+                    caseCount.push(dataArray[i+1])
+                    break;
                 case 'N.America':
                     if (!parseInt(dataArray[i + 2])) {
                         casesByCountry.push(`${dataArray[i + 1]} ${dataArray[i + 2]}`)
