@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 module.exports = {
     casesByRegion: (req) => {
         const $ = cheerio.load(req.data)
-        let tabBody = $('#table3 > tbody > tr > td')
+        let tabBody = $('#main_table_countries > tbody > tr > td')
         let dataArray = tabBody.text().replace(/\s+/g, ' ').trim().split(' ');
         let casesByCountry = [];
         let caseCount = []
@@ -10,65 +10,25 @@ module.exports = {
             country: casesByCountry,
             count: caseCount
         }
-        casesByCountry.push(dataArray[0])
-        caseCount.push(dataArray[1])
 
         let i;
-        for (i = 1; i < dataArray.length; i++) {
+        for (i = 0; i < dataArray.length; i++) {
             if (i === dataArray.length - 1) {
                 return cases
             }
-            switch (dataArray[i]) {
-                case 'Asia':
-                    if (!parseInt(dataArray[i + 2])) {
-                        casesByCountry.push(`${dataArray[i + 1]} ${dataArray[i + 2]}`)
-                        caseCount.push(dataArray[i + 3])
-                        break;
-                    }
-                    else {
-                        casesByCountry.push(dataArray[i + 1])
-                        caseCount.push(dataArray[i + 2])
-                        break;
-                    }
-                case 'Europe':
-                    if (!parseInt(dataArray[i + 2])) {
-                        casesByCountry.push(`${dataArray[i + 1]} ${dataArray[i + 2]}`)
-                        caseCount.push(dataArray[i + 3])
-                        break;
-                    }
-                    else {
-                        casesByCountry.push(dataArray[i + 1])
-                        caseCount.push(dataArray[i + 2])
-                        break;
-                    }
-                case 'Oceania':
-                    if (!parseInt(dataArray[i + 2])) {
-                        casesByCountry.push(`${dataArray[i + 1]} ${dataArray[i + 2]}`)
-                        caseCount.push(dataArray[i + 3])
-                        break;
-                    }
-                    else {
-                        casesByCountry.push(dataArray[i + 1])
-                        caseCount.push(dataArray[i + 2])
-                        break;
-                    }
-                case 'Italy':
+            else if(!parseInt(dataArray[i]) && !dataArray[i].includes('+')){
+                if(dataArray[i] === '0'){
+                    console.log('is zero')
+                }
+                else if(!parseInt(dataArray[i+1])){
+                    casesByCountry.push(`${dataArray[i]} ${dataArray[i+1]}`);
+                    caseCount.push(dataArray[i+2]);
+                    i++;
+                }
+                else{
                     casesByCountry.push(dataArray[i])
                     caseCount.push(dataArray[i+1])
-                    break;
-                case 'N.America':
-                    if (!parseInt(dataArray[i + 2])) {
-                        casesByCountry.push(`${dataArray[i + 1]} ${dataArray[i + 2]}`)
-                        caseCount.push(dataArray[i + 3])
-                        break;
-                    }
-                    else {
-                        casesByCountry.push(dataArray[i + 1])
-                        caseCount.push(dataArray[i + 2])
-                        break;
-                    }
-                default:
-                    break;
+                }
             }
 
         }
