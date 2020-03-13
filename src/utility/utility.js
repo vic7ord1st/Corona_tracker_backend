@@ -13,7 +13,6 @@ module.exports = {
 
         let i;
         for (i = 0; i < dataArray.length; i++) {
-            console.log('top', i)
             if (i === dataArray.length - 1) {
                 return cases
             }
@@ -25,20 +24,17 @@ module.exports = {
                     if(!parseInt(dataArray[i + 2])) {
                         if(!parseInt(dataArray[i + 3])){
                             casesByCountry.push(`${dataArray[i]} ${dataArray[i + 1]} ${dataArray[i + 2]} ${dataArray[i + 3]}`);
-                            console.log(dataArray[i], dataArray[i + 1], dataArray[i + 2], dataArray[i + 3])
                             caseCount.push(dataArray[i + 4]);
                             i = i+4;
                         }
                         else {
                             casesByCountry.push(`${dataArray[i]} ${dataArray[i + 1]} ${dataArray[i + 2]}`);
-                            console.log(dataArray[i], dataArray[i + 1], dataArray[i + 2])
                             caseCount.push(dataArray[i + 3]);
                             i = i+3;
                         }
                     }
                     else {
                         casesByCountry.push(`${dataArray[i]} ${dataArray[i + 1]}`);
-                        console.log(dataArray[i], dataArray[i + 1])
                         caseCount.push(dataArray[i + 2]);
                         i++;
                     }
