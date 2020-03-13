@@ -13,21 +13,40 @@ module.exports = {
 
         let i;
         for (i = 0; i < dataArray.length; i++) {
+            console.log('top', i)
             if (i === dataArray.length - 1) {
                 return cases
             }
-            else if(!parseInt(dataArray[i]) && !dataArray[i].includes('+')){
-                if(dataArray[i] === '0'){
+            else if (!parseInt(dataArray[i]) && !dataArray[i].includes('+') && !parseFloat(dataArray[i])) {
+                if (dataArray[i] === '0') {
                     console.log('is zero')
                 }
-                else if(!parseInt(dataArray[i+1])){
-                    casesByCountry.push(`${dataArray[i]} ${dataArray[i+1]}`);
-                    caseCount.push(dataArray[i+2]);
-                    i++;
+                else if (!parseInt(dataArray[i + 1])) {
+                    if(!parseInt(dataArray[i + 2])) {
+                        if(!parseInt(dataArray[i + 3])){
+                            casesByCountry.push(`${dataArray[i]} ${dataArray[i + 1]} ${dataArray[i + 2]} ${dataArray[i + 3]}`);
+                            console.log(dataArray[i], dataArray[i + 1], dataArray[i + 2], dataArray[i + 3])
+                            caseCount.push(dataArray[i + 4]);
+                            i = i+4;
+                        }
+                        else {
+                            casesByCountry.push(`${dataArray[i]} ${dataArray[i + 1]} ${dataArray[i + 2]}`);
+                            console.log(dataArray[i], dataArray[i + 1], dataArray[i + 2])
+                            caseCount.push(dataArray[i + 3]);
+                            i = i+3;
+                        }
+                    }
+                    else {
+                        casesByCountry.push(`${dataArray[i]} ${dataArray[i + 1]}`);
+                        console.log(dataArray[i], dataArray[i + 1])
+                        caseCount.push(dataArray[i + 2]);
+                        i++;
+                    }
+                    
                 }
-                else{
+                else {
                     casesByCountry.push(dataArray[i])
-                    caseCount.push(dataArray[i+1])
+                    caseCount.push(dataArray[i + 1])
                 }
             }
 
@@ -51,7 +70,7 @@ module.exports = {
     }
 }
 
-function casesWithOutcome (req, headSelector, bodySelector) {
+function casesWithOutcome(req, headSelector, bodySelector) {
     const $ = cheerio.load(req.data)
     let tabBody = $(bodySelector)
     let dataArray = tabBody.text();
@@ -60,7 +79,7 @@ function casesWithOutcome (req, headSelector, bodySelector) {
     let condition;
     dataArray.forEach(element => {
         condition = parseInt(element.replace(/,/g, ''))
-        if(element.includes(',')){
+        if (element.includes(',')) {
             result.push(condition)
         }
     });
@@ -71,7 +90,7 @@ function casesWithOutcome (req, headSelector, bodySelector) {
     }
 }
 
-function currentlyInfected (req, headSelector, bodySelector) {
+function currentlyInfected(req, headSelector, bodySelector) {
     const $ = cheerio.load(req.data)
     let tabBody = $(bodySelector)
     let dataArray = tabBody.text();
@@ -80,7 +99,7 @@ function currentlyInfected (req, headSelector, bodySelector) {
     let condition;
     dataArray.forEach(element => {
         condition = parseInt(element.replace(/,/g, ''))
-        if(element.includes(',')){
+        if (element.includes(',')) {
             result.push(condition)
         }
     });
@@ -91,7 +110,7 @@ function currentlyInfected (req, headSelector, bodySelector) {
     }
 }
 
-function totalDeathCasesScraper (req, headSelector, bodySelector) {
+function totalDeathCasesScraper(req, headSelector, bodySelector) {
     const $ = cheerio.load(req.data)
     let tabHeader = $(headSelector)
     let tabBody = $(bodySelector)
@@ -122,6 +141,11 @@ function totalDeathCasesScraper (req, headSelector, bodySelector) {
                 changeInTotalDeaths.push(dataArray[i + 3])
                 break;
             case 'Mar.':
+                date.push(`${dataArray[i]} ${dataArray[i + 1]}`)
+                totalDeaths.push(dataArray[i + 2])
+                changeInTotalDeaths.push(dataArray[i + 3])
+                break;
+            case 'Apr.':
                 date.push(`${dataArray[i]} ${dataArray[i + 1]}`)
                 totalDeaths.push(dataArray[i + 2])
                 changeInTotalDeaths.push(dataArray[i + 3])
